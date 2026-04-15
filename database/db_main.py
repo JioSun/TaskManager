@@ -30,3 +30,32 @@ def table_add(task):
     ''', (task, False))
     conn.commit()
     conn.close()
+
+def table_list():
+    conn, cur = db_connect()
+    cur.execute('''
+                SELECT * FROM tasks_table
+                ORDER BY id
+                ''')
+    tasks_list = cur.fetchall()
+    conn.close()
+    return tasks_list
+
+def task_done(task_id):
+    conn, cur = db_connect()
+    cur.execute('''
+                UPDATE tasks_table
+                SET status = %s
+                WHERE id = %s;
+                ''', (True, task_id))
+    conn.commit()
+    conn.close()
+
+def task_delete(task_id):
+    conn, cur = db_connect()
+    cur.execute('''
+                DElETE FROM tasks_table
+                WHERE id = %s;
+                ''', (task_id,))
+    conn.commit()
+    conn.close()
